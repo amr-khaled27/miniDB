@@ -30,41 +30,6 @@ A page-based database storage engine built in modern C++17, representing the fou
 │         Physical Storage                │
 │         Binary files on disk            │
 └─────────────────────────────────────────┘
-
-──────────────────────────────────────────────────────────────────────────────────
-
-┌─────────────────────────────────────────┐
-│           Table.hpp                     │  ← **Complete Table Entity**
-│  (Orchestration Layer)                  │     User works here
-│  - filename, file handle                │
-│  - owns Schema                          │
-│  - owns RowStore                        │
-│  - owns FileManager                     │
-│  - load() / flush()                     │
-└────────┬─────────────┬──────────────────┘
-         │             │
-         │             │ delegates to
-    ┌────▼────┐   ┌────▼────────┐
-    │ Schema  │   │  RowStore   │        ← **In-Memory Operations**
-    │         │   │             │           (insert, select, etc.)
-    └─────────┘   └─────────────┘
-                        │
-                        │ uses for validation
-                   ┌────▼────────┐
-                   │  Schema     │        ← **Type System**
-                   └─────────────┘
-                        │
-         ┌──────────────┴──────────────┐
-         │                             │
-    ┌────▼────────┐            ┌───────▼──────┐
-    │FileManager  │            │  RowStore    │  ← **Dual Purpose**
-    │             │            │              │
-    └──────┬──────┘            └──────────────┘
-           │
-           │ uses
-      ┌────▼────┐
-      │  Page   │                      ← **Storage Primitive**
-      └─────────┘
 ```
 
 **Key Principle:** Each layer only knows about the layer directly below it. Changes to lower layers don't affect upper layers (Dependency Inversion).
