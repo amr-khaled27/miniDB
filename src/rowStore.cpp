@@ -10,11 +10,11 @@ bool RowStore::validateRow(const Row &row) const {
     for (int i = 0; i < schema.size(); i++) {
         switch (schema[i].second) {
             case INT:
-                if (!std::holds_alternative<int>(row[i])) return false;
+                if (!std::holds_alternative<int>(row[i])) return false; break;
             case DOUBLE:
-                if (!std::holds_alternative<double>(row[i])) return false;
+                if (!std::holds_alternative<double>(row[i])) return false; break;
             case STRING:
-                if (!std::holds_alternative<std::string>(row[i])) return false;
+                if (!std::holds_alternative<std::string>(row[i])) return false; break;
 
             default:
                 break;
