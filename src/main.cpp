@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Table.hpp"
+#include "HelperFunctions.hpp"
 
 void exampleBasic() {
     std::cout << "\n=== Example 1: Basic Write and Read ===\n";
@@ -7,13 +8,14 @@ void exampleBasic() {
     Table employees(
         "employees.db",
         std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc,
-        {{"id", INT}, {"name", STRING}, {"salary", DOUBLE}}
+        {{"id", INT}, {"name", STRING}, {"salary", DOUBLE}, {"remote", BOOLEAN}}
     );
 
     TableData data = {
-        {1, std::string("Alice"), 98.5},
-        {2, std::string("Bob"), 75.0},
-        {3, std::string("Charlie"), 88.2}
+        {1, std::string("Ali"), 98.5, true},
+        {2, std::string("Basim"), 75.0, true},
+        {3, std::string("Hamada"), 88.2, true},
+        {4, std::string("Mahmoud"), 45.4, true}
     };
 
     employees.getRowStore().loadData(data);
@@ -80,7 +82,7 @@ void exampleCRUD() {
 }
 
 int main() {
-    exampleBasic();
-    exampleCRUD();
-    return 0;
+  exampleBasic();
+  // timestampToUnix("31:12:1980 11:59:59 PM");
+  return 0;
 }

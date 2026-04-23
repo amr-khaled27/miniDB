@@ -15,6 +15,10 @@ bool RowStore::validateRow(const Row &row) const {
                 if (!std::holds_alternative<double>(row[i])) return false; break;
             case STRING:
                 if (!std::holds_alternative<std::string>(row[i])) return false; break;
+            case BOOLEAN:
+                if (!std::holds_alternative<bool>(row[i])) return false; break;
+            case TIMESTAMP:
+                if (!std::holds_alternative<int>(row[i])) return false; break;
 
             default:
                 break;

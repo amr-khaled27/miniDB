@@ -3,9 +3,9 @@
 #include <string>
 #include <variant>
 
-enum SupportedTypes {INT, DOUBLE, STRING};
+enum SupportedTypes {INT, DOUBLE, STRING, BOOLEAN,TIMESTAMP};
 
-using Row = std::vector<std::variant<int, double, std::string>>;
+using Row = std::vector<std::variant<int, double, std::string, bool>>;
 
 using TableData = std::vector<Row>;
 

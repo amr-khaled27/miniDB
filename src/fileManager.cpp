@@ -40,6 +40,14 @@ size_t FileManager::serializeRow(
             offset += sizeof(uint32_t);
             std::memcpy(buffer + offset, s.data(), len);
             offset += len;
+        } else if (std::holds_alternative<bool>(field)) {
+            if (offset + sizeof(uint8_t) > bufferSize) return 0;
+
+            bool value = std::get<bool>(field);
+            uint8_t out = value ? 1 : 0;
+
+            std::memcpy(buffer + offset, &out, sizeof(uint8_t));
+            offset += sizeof(uint8_t);
         }
     }
     
@@ -89,6 +97,17 @@ size_t FileManager::deserializeRow(
                 std::memcpy(s.data(), buffer + offset, len);
                 offset += len;
                 row.push_back(s);
+                break;
+            }
+            case BOOLEAN: {
+                if (offset + sizeof(uint8_t) > bufferSize) return 0;
+
+                uint8_t value;
+                std::memcpy(&value, buffer + offset, sizeof(uint8_t));
+                offset += sizeof(uint8_t);
+
+                bool b = (value != 0);
+                row.push_back(b);
                 break;
             }
         }
