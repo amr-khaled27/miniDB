@@ -1,6 +1,8 @@
 #include "RowStore.hpp"
 #include <iostream>
 #include <algorithm>
+#include <ctime>
+#include <iomanip>
 
 RowStore::RowStore(const Schema& schema) : schema(schema) {}
 
@@ -18,7 +20,7 @@ bool RowStore::validateRow(const Row &row) const {
             case BOOLEAN:
                 if (!std::holds_alternative<bool>(row[i])) return false; break;
             case TIMESTAMP:
-                if (!std::holds_alternative<int>(row[i])) return false; break;
+                if (!std::holds_alternative<long long>(row[i])) return false; break;
 
             default:
                 break;
@@ -45,9 +47,13 @@ void RowStore::clear() {
 }
 
 void RowStore::printAll() const {
+    for (const auto& label : schema) {
+        std::cout << label.first << ' ';
+    }
+    std::cout << '\n';
     for (const auto& row : table_data) {
-        for (const auto& field : row) {
-            std::visit([](auto&& val) { std::cout << val << " "; }, field);
+        for (auto& field : row) {
+            std::visit([](auto&& val) { std::cout << val << ' '; }, field);
         }
         std::cout << "\n";
     }

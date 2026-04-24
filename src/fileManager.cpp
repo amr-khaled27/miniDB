@@ -48,6 +48,11 @@ size_t FileManager::serializeRow(
 
             std::memcpy(buffer + offset, &out, sizeof(uint8_t));
             offset += sizeof(uint8_t);
+        } else if (std::holds_alternative<long long>(field)) {
+            if (offset + sizeof(long long) > bufferSize) return 0;
+            long long value = std::get<long long>(field);
+            std::memcpy(buffer + offset, &value, sizeof(long long));
+            offset += sizeof(long long);
         }
     }
     
@@ -108,6 +113,13 @@ size_t FileManager::deserializeRow(
 
                 bool b = (value != 0);
                 row.push_back(b);
+                break;
+            } case TIMESTAMP: {
+                if (offset + sizeof(long long) > bufferSize) return 0;
+                long long value;
+                std::memcpy(&value, buffer + offset, sizeof(long long));
+                offset += sizeof(long long);
+                row.push_back(value);
                 break;
             }
         }

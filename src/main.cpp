@@ -8,19 +8,25 @@ void exampleBasic() {
     Table employees(
         "employees.db",
         std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc,
-        {{"id", INT}, {"name", STRING}, {"salary", DOUBLE}, {"remote", BOOLEAN}}
+        {{"id", INT}, {"name", STRING}, {"salary", DOUBLE}, {"remote", BOOLEAN}, {"hire_date", TIMESTAMP}}
     );
 
+    // Get current timestamp or create specific dates
+    long long timestamp1 = timestampToUnix("15:04:2024 09:00:00 AM");
+    long long timestamp2 = timestampToUnix("16:04:2024 10:30:00 AM");
+    long long timestamp3 = timestampToUnix("17:04:2024 02:15:00 PM");
+    long long timestamp4 = timestampToUnix("18:04:2024 11:45:00 AM");
+
     TableData data = {
-        {1, std::string("Ali"), 98.5, true},
-        {2, std::string("Basim"), 75.0, true},
-        {3, std::string("Hamada"), 88.2, true},
-        {4, std::string("Mahmoud"), 45.4, true}
+        {1, std::string("Ali"), 98.5, true, timestamp1},
+        {2, std::string("Basim"), 75.0, true, timestamp2},
+        {3, std::string("Hamada"), 88.2, true, timestamp3},
+        {4, std::string("Mahmoud"), 45.4, true, timestamp4}
     };
 
     employees.getRowStore().loadData(data);
     employees.flush();
-    std::cout << "✓ Wrote 3 rows to disk\n";
+    std::cout << "✓ Wrote " << data.size() << " rows to disk\n";
 
     employees.getRowStore().clear();
     std::cout << "✓ Cleared in-memory data\n";
@@ -83,6 +89,6 @@ void exampleCRUD() {
 
 int main() {
   exampleBasic();
-  // timestampToUnix("31:12:1980 11:59:59 PM");
+  
   return 0;
 }

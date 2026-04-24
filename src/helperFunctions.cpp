@@ -1,9 +1,7 @@
 #include "HelperFunctions.hpp"
-#include <iostream>
-#include <vector>
 
 std::vector<int> split(std::string timestamp) {
-    // format "dd:mm:yyyy ss:mm:hh (pm/am)"
+    // format "dd:mm:yyyy hh:mm:ss (pm/am)"
     // "23:04:2026 07:30:00 PM"
     std::cout << "Split Helper Hit\n";
     std::vector<int> result;
@@ -33,19 +31,19 @@ std::vector<int> split(std::string timestamp) {
     return result;
 }
 
-int timestampToUnix(std::string timestamp) {
-    int sum = 0;
-    std::vector<int> format = split(timestamp);
-
-    // Year
-    int days = 0;
-    for (int i = 1970; i < format[2]; i++) {
-        if ((i % 4 == 0 && i % 100 != 0) || (i % 400 == 0)) {
-            days += 366;
-        } else {
-            days += 365;
-        }
-    }
-    std::cout<<days;
-    return sum;
+long long timestampToUnix(const std::string& timestamp) {
+    std::vector<int> parts = split(timestamp);
+    if (parts.size() != 6) return -1;
+    
+    // parts: [day, month, year, hour, minute, second]
+    struct tm t = {0};
+    t.tm_year = parts[2] - 1900;  // years since 1900
+    t.tm_mon = parts[1] - 1;       // months 0-11
+    t.tm_mday = parts[0];          // day of month
+    t.tm_hour = parts[3];          // hours
+    t.tm_min = parts[4];           // minutes
+    t.tm_sec = parts[5];           // seconds
+    
+    // mktime handles ALL calendar complexity: leap years, month lengths, everything
+    return timegm(&t);  // timegm = UTC version of mktime
 }

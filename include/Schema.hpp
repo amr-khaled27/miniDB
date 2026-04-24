@@ -5,7 +5,7 @@
 
 enum SupportedTypes {INT, DOUBLE, STRING, BOOLEAN,TIMESTAMP};
 
-using Row = std::vector<std::variant<int, double, std::string, bool>>;
+using Row = std::vector<std::variant<int, double, std::string, bool, long long>>;
 
 using TableData = std::vector<Row>;
 
